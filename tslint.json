@@ -9,7 +9,7 @@
     "component-class-suffix": true,
     "contextual-lifecycle": true,
     "directive-class-suffix": true,
-    "directive-selector": [true, "attribute", "tgm", "camelCase"],
+    "directive-selector": [true, "attribute", "tgm", "camel-case"],
     "component-selector": [true, "element", "tgm", "kebab-case"],
     "import-blacklist": [true, "rxjs/Rx"],
     "interface-name": false,

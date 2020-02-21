@@ -13,7 +13,7 @@
 
 :host {
   @include flex-row();
-  @include flex-align(center, start);
+  @include flex-align(center, flex-start);
   padding: 1rem;
   width: 100%;
   position: relative;
@@ -22,10 +22,10 @@
     max-width: 100%;
     @include flex-column();
     @include flex-align(center, center);
-    .item-box {
+    tgm-dynamic-overlay {
       max-width: 100%;
       @include flex-row();
-      @include flex-align(start, stretch);
+      @include flex-align(flex-start, stretch);
       padding: 1rem;
       border-radius: 4px;
       border: 1px solid #ccc;
@@ -38,11 +38,12 @@
     }
   }
 }
-
-.item-overlay {
-  @include flex-column();
-  @include flex-align(start, center);
-  > *:not(:last-child) {
-    margin-bottom: 1rem;
+::ng-deep {
+  .tgm-overlay-panel {
+    @include flex-column();
+    @include flex-align(flex-start, center);
+    > *:not(:last-child) {
+      margin-bottom: 1rem;
+    }
   }
 }

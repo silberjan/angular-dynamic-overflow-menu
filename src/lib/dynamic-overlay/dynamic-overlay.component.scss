@@ -20,9 +20,11 @@
   }
 }
 
-.tgm-overlay-panel {
-  @include mat-elevation(5);
-  border-radius: 4px;
-  background: #fff;
-  padding: 1rem;
+::ng-deep {
+  .tgm-overlay-panel {
+    @include mat-elevation(5);
+    border-radius: 4px;
+    background: #fff;
+    padding: 1rem;
+  }
 }

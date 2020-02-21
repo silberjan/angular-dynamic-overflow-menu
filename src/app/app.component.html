@@ -1,22 +1,29 @@
-<div class="container" *ngIf="hostOrOverlay$ | async; let breakpointFn">
-  <div class="item-box" #itemBox>
-    <ng-container *ngTemplateOutlet="responsive; context: hostContext"></ng-container>
-    <tgm-dynamic-overlay *ngIf="breakpointFn('overlay', 550)">
-      <div tgm-overlay-content class="item-overlay" #overlayContainer>
-        <ng-container *ngTemplateOutlet="responsive; context: overlayContext"></ng-container>
-      </div>
+<div class="container">
+  <div class="item-box">
+
+    <tgm-dynamic-overlay>
+
+      <ng-template>
+
+        <!-- <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+        <div class="item">7</div> -->
+
+        <div class="item" *tgmOverlayBreakpoint="250">1</div>
+        <div class="item" *tgmOverlayBreakpoint="300">2</div>
+        <div class="item" *tgmOverlayBreakpoint="350">3</div>
+        <div class="item" *tgmOverlayBreakpoint="400">4</div>
+        <div class="item" *tgmOverlayBreakpoint="450">5</div>
+        <div class="item" *tgmOverlayBreakpoint="500">6</div>
+        <div class="item" *tgmOverlayBreakpoint="550">7</div>
+      </ng-template>
+
+
     </tgm-dynamic-overlay>
+
   </div>
 </div>
-
-<ng-template #responsive let-env>
-  <ng-container *ngIf="hostOrOverlay$ | async; let breakpointFn">
-    <div class="item" *ngIf="breakpointFn(env, 250)">1</div>
-    <div class="item" *ngIf="breakpointFn(env, 300)">2</div>
-    <div class="item" *ngIf="breakpointFn(env, 350)">3</div>
-    <div class="item" *ngIf="breakpointFn(env, 400)">4</div>
-    <div class="item" *ngIf="breakpointFn(env, 450)">5</div>
-    <div class="item" *ngIf="breakpointFn(env, 500)">6</div>
-    <div class="item" *ngIf="breakpointFn(env, 550)">7</div>
-  </ng-container>
-</ng-template>
