@@ -1,25 +1,25 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { DynamicOverlayComponent } from './dynamic-overlay.component';
+import { DynamicOverlayComponent } from './dynamic-overlay.component'
+import { DynamicOverlayModule } from './dynamic-overlay.module'
 
 describe('DynamicOverlayComponent', () => {
-  let component: DynamicOverlayComponent;
-  let fixture: ComponentFixture<DynamicOverlayComponent>;
+  let component: DynamicOverlayComponent
+  let fixture: ComponentFixture<DynamicOverlayComponent>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DynamicOverlayComponent ]
-    })
-    .compileComponents();
-  }));
+      imports: [DynamicOverlayModule],
+    }).compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DynamicOverlayComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(DynamicOverlayComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  test('should create', () => {
+    expect(component).toBeTruthy()
+  })
+})
