@@ -1,0 +1,11 @@
+<button title="more" (click)="this.open()" #origin>
+  <span>●</span>
+  <span>●</span>
+  <span>●</span>
+</button>
+
+<ng-template #overlayContentTemplate>
+  <div class="tgm-overlay-panel">
+    <ng-content select="[tgm-overlay-content]"></ng-content>
+  </div>
+</ng-template>

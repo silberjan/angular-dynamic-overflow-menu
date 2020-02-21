@@ -1,0 +1,26 @@
+@mixin flex-row() {
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin flex-column() {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-align($justify: flex-start, $align: center) {
+  align-items: $align;
+  justify-content: $justify;
+}
+
+@mixin row-gap($size) {
+  & > :not(:last-child) {
+    margin-right: $size;
+  }
+}
+
+@mixin column-gap($size) {
+  & > :not(:last-child) {
+    margin-bottom: $size;
+  }
+}

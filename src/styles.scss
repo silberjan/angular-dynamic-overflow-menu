@@ -1,1 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/theming';
+@include mat-core();
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body,
+html {
+  margin: 0px;
+  padding: 0px;
+  font-family: 'roboto', 'helvetica', sans-serif;
+  overflow: hidden;
+}
