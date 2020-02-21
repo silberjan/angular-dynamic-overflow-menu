@@ -2,26 +2,20 @@
   <div class="item-box">
 
     <tgm-dynamic-overlay>
-
       <ng-template>
-
-        <!-- <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-        <div class="item">4</div>
-        <div class="item">5</div>
-        <div class="item">6</div>
-        <div class="item">7</div> -->
-
         <div class="item" *tgmOverlayBreakpoint="250">1</div>
         <div class="item" *tgmOverlayBreakpoint="300">2</div>
         <div class="item" *tgmOverlayBreakpoint="350">3</div>
         <div class="item" *tgmOverlayBreakpoint="400">4</div>
-        <div class="item" *tgmOverlayBreakpoint="450">5</div>
         <div class="item" *tgmOverlayBreakpoint="500">6</div>
         <div class="item" *tgmOverlayBreakpoint="550">7</div>
       </ng-template>
 
+      <button tgm-dynamic-overlay-trigger>
+        <span>●</span>
+        <span>●</span>
+        <span>●</span>
+      </button>
 
     </tgm-dynamic-overlay>
 

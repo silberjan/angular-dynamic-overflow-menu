@@ -18,7 +18,7 @@ import {
   ViewContainerRef,
   AfterViewInit,
 } from '@angular/core'
-import { combineLatest, Observable, of, Subject, from } from 'rxjs'
+import { combineLatest, Observable, of, Subject, from, BehaviorSubject } from 'rxjs'
 import {
   distinctUntilChanged,
   map,
@@ -29,6 +29,9 @@ import {
   startWith,
   shareReplay,
   share,
+  withLatestFrom,
+  reduce,
+  scan,
 } from 'rxjs/operators'
 import { DynamicOverlayService } from './dynamic-overlay.service'
 
@@ -38,7 +41,7 @@ import { DynamicOverlayService } from './dynamic-overlay.service'
   styleUrls: ['./dynamic-overlay.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DynamicOverlayComponent {
+export class DynamicOverlayComponent implements OnDestroy {
   @ViewChild('origin', { static: false }) overlayOrigin: ElementRef<HTMLButtonElement>
   @ContentChild(TemplateRef) overlayContent: TemplateRef<any>
   /**
@@ -54,22 +57,34 @@ export class DynamicOverlayComponent {
   private overlayRef: OverlayRef
   private portal: TemplatePortal<any>
 
-  private breakpointChildrenInHost$ = new Subject<Observable<boolean>>()
-  showMoreButton$: Observable<boolean>
-  testObs$: Observable<string>
+  private breakpoints$ = new BehaviorSubject<number>(0)
+  private highgestBreakpoint$ = this.breakpoints$.pipe(
+    scan((acc, val) => (val > acc ? val : acc), 0),
+    distinctUntilChanged()
+  )
 
-  constructor(private overlay: Overlay, private viewContainerRef: ViewContainerRef, private cdr: ChangeDetectorRef) {
-    this.showMoreButton$ = this.breakpointChildrenInHost$.pipe(
-      mergeScan((prev, cur) => of([...prev, cur]), []),
-      switchMap(childrenInHost => combineLatest(childrenInHost)),
-      map(inHostChildren => inHostChildren.indexOf(false) > -1),
+  showMoreButton$: Observable<boolean>
+
+  private destroy$ = new Subject<void>()
+
+  constructor(
+    private overlay: Overlay,
+    private viewContainerRef: ViewContainerRef,
+    private cdr: ChangeDetectorRef,
+    dynamicOverlayService: DynamicOverlayService
+  ) {
+    this.showMoreButton$ = dynamicOverlayService.windowResize$.pipe(
+      withLatestFrom(this.highgestBreakpoint$),
+      map(([, bp]) => window.innerWidth < bp),
       distinctUntilChanged(),
       shareReplay(1)
     )
+
+    this.showMoreButton$.pipe(takeUntil(this.destroy$)).subscribe(() => this.close())
   }
 
-  registerChild(obs: Observable<boolean>) {
-    this.breakpointChildrenInHost$.next(obs)
+  registerBreakpoint(bp: number) {
+    this.breakpoints$.next(bp)
     this.cdr.markForCheck()
     this.cdr.detectChanges()
   }
@@ -109,6 +124,11 @@ export class DynamicOverlayComponent {
     this.overlayRef.detach()
     this.closed.emit()
   }
+
+  ngOnDestroy() {
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
 }
 
 @Directive({
@@ -137,7 +157,7 @@ export class OverlayBreakpointDirective implements OnDestroy, OnInit {
       takeUntil(this.destroy$.asObservable())
     )
 
-    this.dynamicOverlayComponent.registerChild(this.renderedInHost$)
+    this.dynamicOverlayComponent.registerBreakpoint(this.breakpoint)
 
     this.renderedInHost$.subscribe(shouldBeInHost => {
       if (inHost === shouldBeInHost) {

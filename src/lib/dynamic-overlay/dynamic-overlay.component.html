@@ -1,7 +1,5 @@
 <ng-container *ngTemplateOutlet="overlayContent"></ng-container>
 
-<button *ngIf="showMoreButton$ | async" title="more" (click)="this.open()" #origin>
-  <span>●</span>
-  <span>●</span>
-  <span>●</span>
-</button>
+<div class="overlay-trigger" *ngIf="showMoreButton$ | async" title="more" (click)="this.open()" #origin>
+  <ng-content select="[tgm-dynamic-overlay-trigger]"></ng-content>
+</div>
