@@ -108,10 +108,7 @@ export class DynamicOverlayComponent implements OnDestroy {
       positionStrategy,
     })
 
-    this.overlayRef.backdropClick().subscribe(() => {
-      this.overlayRef.detach()
-      this.closed.emit()
-    })
+    this.overlayRef.backdropClick().subscribe(() => this.close())
     this.portal = new TemplatePortal(this.overlayContent, this.viewContainerRef, this.overlayContent)
     this.overlayRef.attach(this.portal)
     this.opened.emit()
