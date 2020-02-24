@@ -109,7 +109,7 @@ export class DynamicOverlayComponent implements OnDestroy {
     })
 
     this.overlayRef.backdropClick().subscribe(() => this.close())
-    this.portal = new TemplatePortal(this.overlayContent, this.viewContainerRef, this.overlayContent)
+    this.portal = new TemplatePortal(this.overlayContent, this.viewContainerRef)
     this.overlayRef.attach(this.portal)
     this.opened.emit()
   }
@@ -129,10 +129,12 @@ export class DynamicOverlayComponent implements OnDestroy {
 }
 
 @Directive({
-  selector: '[tgmOverlayBreakpoint]',
+  selector: '[tgmResponsiveItem]',
 })
-export class OverlayBreakpointDirective implements OnDestroy, OnInit {
-  @Input('tgmOverlayBreakpoint') breakpoint = 0
+export class ResponsiveItemDirective implements OnDestroy, OnInit {
+  @Input('tgmResponsiveItem') itemType: 'auto' | 'host' | 'overlay' = 'auto'
+
+  @Input('tgmResponsiveItemBreakpoint') breakpoint = 0
 
   private destroy$ = new Subject<void>()
   renderedInHost$: Observable<boolean>
@@ -148,8 +150,9 @@ export class OverlayBreakpointDirective implements OnDestroy, OnInit {
   ngOnInit() {
     const nE: HTMLElement = this.element.nativeElement
     const inHost = nE.parentElement.nodeName === 'TGM-DYNAMIC-OVERLAY'
+
     this.renderedInHost$ = this.dynamicOverlayService.displayInHost$.pipe(
-      map(shouldBeInHost => shouldBeInHost(this.breakpoint)),
+      map(shouldBeInHost => (this.itemType === 'auto' ? shouldBeInHost(this.breakpoint) : this.itemType === 'host')),
       distinctUntilChanged(),
       takeUntil(this.destroy$.asObservable())
     )

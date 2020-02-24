@@ -10,12 +10,14 @@ import { By } from '@angular/platform-browser'
   template: `
     <tgm-dynamic-overlay>
       <ng-template>
-        <div class="item" *tgmOverlayBreakpoint="250">1</div>
-        <div class="item" *tgmOverlayBreakpoint="300">2</div>
-        <div class="item" *tgmOverlayBreakpoint="350">3</div>
-        <div class="item" *tgmOverlayBreakpoint="400">4</div>
-        <div class="item" *tgmOverlayBreakpoint="500">6</div>
-        <div class="item" *tgmOverlayBreakpoint="550">7</div>
+        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 250">1</div>
+        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 300">2</div>
+        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 350">3</div>
+        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 400">4</div>
+        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 500">6</div>
+        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 550">7</div>
+        <div class="staticitem" *tgmResponsiveItem="'overlay'">ONLY OVERLAY</div>
+        <div class="staticitem" *tgmResponsiveItem="'host'">ONLY HOST</div>
       </ng-template>
 
       <button tgm-dynamic-overlay-trigger>
@@ -67,6 +69,8 @@ describe('DynamicOverlayComponent', () => {
   test('should show all the items in the template', () => {
     const items = fixture.debugElement.queryAll(By.css('.item'))
     expect(items.length).toBe(6)
+    const staticitems = fixture.debugElement.queryAll(By.css('.staticitem'))
+    expect(staticitems.length).toBe(1)
   })
 
   test('should hide items based on window width', () => {
