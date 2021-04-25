@@ -22,7 +22,7 @@
     max-width: 100%;
     @include flex-column();
     @include flex-align(center, center);
-    tgm-dynamic-overlay {
+    jcs-dynamic-overlay {
       max-width: 100%;
       @include flex-row();
       @include flex-align(flex-start, stretch);
@@ -56,7 +56,7 @@
   }
 }
 ::ng-deep {
-  .tgm-overlay-panel {
+  .jcs-overlay-panel {
     @include flex-column();
     @include flex-align(flex-start, center);
     > *:not(:last-child) {

@@ -13,7 +13,6 @@ module.exports = {
     '^.+\\.(ts|js|html)$': 'ts-jest',
   },
   verbose: false,
-  transformIgnorePatterns: ['<rootDir>/node_modules/(?!ngx-cookie-service|@targomo/tamil)'],
   collectCoverageFrom: ['src/**/*.{ts,js}', '!**/node_modules/**'],
   coveragePathIgnorePatterns: [
     '.module.ts',

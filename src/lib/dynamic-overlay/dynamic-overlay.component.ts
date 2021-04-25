@@ -16,36 +16,30 @@ import {
   TemplateRef,
   ViewChild,
   ViewContainerRef,
-  AfterViewInit,
 } from '@angular/core'
-import { combineLatest, Observable, of, Subject, from, BehaviorSubject } from 'rxjs'
-import {
-  distinctUntilChanged,
-  map,
-  mergeScan,
-  switchMap,
-  takeUntil,
-  tap,
-  startWith,
-  shareReplay,
-  share,
-  withLatestFrom,
-  reduce,
-  scan,
-} from 'rxjs/operators'
+import { BehaviorSubject, Observable, Subject } from 'rxjs'
+import { distinctUntilChanged, map, scan, shareReplay, takeUntil, withLatestFrom } from 'rxjs/operators'
 import { DynamicOverlayService } from './dynamic-overlay.service'
 
 @Component({
-  selector: 'tgm-dynamic-overlay',
+  selector: 'jcs-dynamic-overlay',
   templateUrl: './dynamic-overlay.component.html',
   styleUrls: ['./dynamic-overlay.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DynamicOverlayComponent implements OnDestroy {
-  @ViewChild('origin', { static: false }) overlayOrigin: ElementRef<HTMLButtonElement>
-  @ContentChild(TemplateRef) overlayContent: TemplateRef<any>
   /**
-   * Emits when the overlay is opene
+   * Origin for the overlay. (the ●●● button)
+   */
+  @ViewChild('origin', { static: false }) overlayOrigin: ElementRef<HTMLButtonElement>
+
+  /**
+   * The template of items to move back and forth
+   */
+  @ContentChild(TemplateRef) overlayContent: TemplateRef<any>
+
+  /**
+   * Emits when the overlay is opened
    */
   @Output() opened = new EventEmitter<void>(null)
 
@@ -103,7 +97,7 @@ export class DynamicOverlayComponent implements OnDestroy {
 
     this.overlayRef = this.overlay.create({
       hasBackdrop: true,
-      panelClass: 'tgm-overlay-panel',
+      panelClass: 'jcs-overlay-panel',
       backdropClass: 'cdk-transparent-backdrop',
       positionStrategy,
     })
@@ -129,12 +123,12 @@ export class DynamicOverlayComponent implements OnDestroy {
 }
 
 @Directive({
-  selector: '[tgmResponsiveItem]',
+  selector: '[jcsResponsiveItem]',
 })
 export class ResponsiveItemDirective implements OnDestroy, OnInit {
-  @Input('tgmResponsiveItem') itemType: 'auto' | 'host' | 'overlay' = 'auto'
+  @Input('jcsResponsiveItem') itemType: 'auto' | 'host' | 'overlay' = 'auto'
 
-  @Input('tgmResponsiveItemBreakpoint') breakpoint = 0
+  @Input('jcsResponsiveItemBreakpoint') breakpoint = 0
 
   private destroy$ = new Subject<void>()
   renderedInHost$: Observable<boolean>
@@ -149,17 +143,17 @@ export class ResponsiveItemDirective implements OnDestroy, OnInit {
 
   ngOnInit() {
     const nE: HTMLElement = this.element.nativeElement
-    const inHost = nE.parentElement.nodeName === 'TGM-DYNAMIC-OVERLAY'
+    const inHost = nE.parentElement.nodeName === 'JCS-DYNAMIC-OVERLAY'
 
     this.renderedInHost$ = this.dynamicOverlayService.displayInHost$.pipe(
-      map(shouldBeInHost => (this.itemType === 'auto' ? shouldBeInHost(this.breakpoint) : this.itemType === 'host')),
+      map((shouldBeInHost) => (this.itemType === 'auto' ? shouldBeInHost(this.breakpoint) : this.itemType === 'host')),
       distinctUntilChanged(),
       takeUntil(this.destroy$.asObservable())
     )
 
     this.dynamicOverlayComponent.registerBreakpoint(this.breakpoint)
 
-    this.renderedInHost$.subscribe(shouldBeInHost => {
+    this.renderedInHost$.subscribe((shouldBeInHost) => {
       if (inHost === shouldBeInHost) {
         this.viewContainer.createEmbeddedView(this.localTemplate)
       } else {

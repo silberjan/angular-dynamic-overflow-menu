@@ -1,13 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser'
 import { NgModule } from '@angular/core'
-import { OverlayButtonModule } from '@targomo/ng/buttons/overlay-button'
-
-import { AppComponent } from './app.component'
+import { BrowserModule } from '@angular/platform-browser'
 import { DynamicOverlayModule } from 'src/lib/dynamic-overlay/dynamic-overlay.module'
+import { AppComponent } from './app.component'
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, OverlayButtonModule, DynamicOverlayModule],
+  imports: [BrowserModule, DynamicOverlayModule],
   providers: [],
   bootstrap: [AppComponent],
 })

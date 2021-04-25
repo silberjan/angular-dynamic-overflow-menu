@@ -8,24 +8,24 @@ import { By } from '@angular/platform-browser'
 
 @Component({
   template: `
-    <tgm-dynamic-overlay>
+    <jcs-dynamic-overlay>
       <ng-template>
-        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 250">1</div>
-        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 300">2</div>
-        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 350">3</div>
-        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 400">4</div>
-        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 500">6</div>
-        <div class="item" *tgmResponsiveItem="'auto'; breakpoint: 550">7</div>
-        <div class="staticitem" *tgmResponsiveItem="'overlay'">ONLY OVERLAY</div>
-        <div class="staticitem" *tgmResponsiveItem="'host'">ONLY HOST</div>
+        <div class="item" *jcsResponsiveItem="'auto'; breakpoint: 250">1</div>
+        <div class="item" *jcsResponsiveItem="'auto'; breakpoint: 300">2</div>
+        <div class="item" *jcsResponsiveItem="'auto'; breakpoint: 350">3</div>
+        <div class="item" *jcsResponsiveItem="'auto'; breakpoint: 400">4</div>
+        <div class="item" *jcsResponsiveItem="'auto'; breakpoint: 500">6</div>
+        <div class="item" *jcsResponsiveItem="'auto'; breakpoint: 550">7</div>
+        <div class="staticitem" *jcsResponsiveItem="'overlay'">ONLY OVERLAY</div>
+        <div class="staticitem" *jcsResponsiveItem="'host'">ONLY HOST</div>
       </ng-template>
 
-      <button tgm-dynamic-overlay-trigger>
+      <button jcs-dynamic-overlay-trigger>
         <span>●</span>
         <span>●</span>
         <span>●</span>
       </button>
-    </tgm-dynamic-overlay>
+    </jcs-dynamic-overlay>
   `,
 })
 class TestComponent {}
