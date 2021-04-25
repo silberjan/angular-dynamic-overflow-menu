@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { DynamicOverlayComponent, ResponsiveItemDirective } from './dynamic-overlay.component'
+import { DynamicOverlayComponent } from './dynamic-overlay.component'
 import { OverlayModule } from '@angular/cdk/overlay'
+import { ResponsiveItemDirective } from './responseive-item.directive'
 
 @NgModule({
   declarations: [DynamicOverlayComponent, ResponsiveItemDirective],

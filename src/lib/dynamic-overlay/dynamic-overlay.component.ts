@@ -67,9 +67,9 @@ export class DynamicOverlayComponent implements OnDestroy {
     private cdr: ChangeDetectorRef,
     dynamicOverlayService: DynamicOverlayService
   ) {
-    this.showMoreButton$ = dynamicOverlayService.windowResize$.pipe(
+    this.showMoreButton$ = dynamicOverlayService.windowWidth$.pipe(
       withLatestFrom(this.highgestBreakpoint$),
-      map(([, bp]) => window.innerWidth < bp),
+      map(([windowWidth, bp]) => windowWidth < bp),
       distinctUntilChanged(),
       shareReplay(1)
     )
@@ -77,13 +77,13 @@ export class DynamicOverlayComponent implements OnDestroy {
     this.showMoreButton$.pipe(takeUntil(this.destroy$)).subscribe(() => this.close())
   }
 
-  registerBreakpoint(bp: number) {
+  registerBreakpoint(bp: number): void {
     this.breakpoints$.next(bp)
     this.cdr.markForCheck()
     this.cdr.detectChanges()
   }
 
-  open() {
+  open(): void {
     if (!!this.overlayRef && this.overlayRef.hasAttached()) {
       return
     }
@@ -108,7 +108,7 @@ export class DynamicOverlayComponent implements OnDestroy {
     this.opened.emit()
   }
 
-  close() {
+  close(): void {
     if (!this.overlayRef || !this.overlayRef.hasAttached()) {
       return
     }
@@ -116,53 +116,7 @@ export class DynamicOverlayComponent implements OnDestroy {
     this.closed.emit()
   }
 
-  ngOnDestroy() {
-    this.destroy$.next()
-    this.destroy$.complete()
-  }
-}
-
-@Directive({
-  selector: '[jcsResponsiveItem]',
-})
-export class ResponsiveItemDirective implements OnDestroy, OnInit {
-  @Input('jcsResponsiveItem') itemType: 'auto' | 'host' | 'overlay' = 'auto'
-
-  @Input('jcsResponsiveItemBreakpoint') breakpoint = 0
-
-  private destroy$ = new Subject<void>()
-  renderedInHost$: Observable<boolean>
-
-  constructor(
-    private element: ElementRef,
-    private localTemplate: TemplateRef<string>,
-    private viewContainer: ViewContainerRef,
-    private dynamicOverlayService: DynamicOverlayService,
-    @Host() private dynamicOverlayComponent: DynamicOverlayComponent
-  ) {}
-
-  ngOnInit() {
-    const nE: HTMLElement = this.element.nativeElement
-    const inHost = nE.parentElement.nodeName === 'JCS-DYNAMIC-OVERLAY'
-
-    this.renderedInHost$ = this.dynamicOverlayService.displayInHost$.pipe(
-      map((shouldBeInHost) => (this.itemType === 'auto' ? shouldBeInHost(this.breakpoint) : this.itemType === 'host')),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$.asObservable())
-    )
-
-    this.dynamicOverlayComponent.registerBreakpoint(this.breakpoint)
-
-    this.renderedInHost$.subscribe((shouldBeInHost) => {
-      if (inHost === shouldBeInHost) {
-        this.viewContainer.createEmbeddedView(this.localTemplate)
-      } else {
-        this.viewContainer.clear()
-      }
-    })
-  }
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy$.next()
     this.destroy$.complete()
   }
