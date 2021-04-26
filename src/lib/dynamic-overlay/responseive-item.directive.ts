@@ -19,7 +19,7 @@ export class ResponsiveItemDirective implements OnDestroy, OnInit {
   constructor(
     private element: ElementRef,
     private localTemplate: TemplateRef<string>,
-    private viewContainer: ViewContainerRef,
+    private vcr: ViewContainerRef,
     private dynamicOverlayService: DynamicOverlayService,
     @Host() private dynamicOverlayComponent: DynamicOverlayComponent
   ) {}
@@ -38,9 +38,9 @@ export class ResponsiveItemDirective implements OnDestroy, OnInit {
 
     this.renderedInHost$.subscribe((shouldBeInHost) => {
       if (inHost === shouldBeInHost) {
-        this.viewContainer.createEmbeddedView(this.localTemplate)
+        this.vcr.createEmbeddedView(this.localTemplate)
       } else {
-        this.viewContainer.clear()
+        this.vcr.clear()
       }
     })
   }
