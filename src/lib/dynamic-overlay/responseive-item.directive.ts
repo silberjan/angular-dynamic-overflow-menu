@@ -1,4 +1,15 @@
-import { Directive, ElementRef, Host, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from '@angular/core'
+import { OverlayContainer } from '@angular/cdk/overlay'
+import {
+  Directive,
+  ElementRef,
+  Host,
+  Input,
+  OnDestroy,
+  OnInit,
+  Optional,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core'
 import { Observable, Subject } from 'rxjs'
 import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators'
 import { DynamicOverlayComponent } from './dynamic-overlay.component'
@@ -26,7 +37,16 @@ export class ResponsiveItemDirective implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     const nE: HTMLElement = this.element.nativeElement
-    const inHost = nE.parentElement.nodeName === 'JCS-DYNAMIC-OVERLAY'
+
+    function isInHost(element: HTMLElement) {
+      return element.parentElement
+        ? element.parentElement.nodeName === 'JCS-DYNAMIC-OVERLAY'
+          ? true
+          : isInHost(element.parentElement)
+        : false
+    }
+
+    const inHost = isInHost(nE)
 
     this.renderedInHost$ = this.dynamicOverlayService.displayInHost$.pipe(
       map((shouldBeInHost) => (this.itemType === 'auto' ? shouldBeInHost(this.breakpoint) : this.itemType === 'host')),

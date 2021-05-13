@@ -1,24 +1,21 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay'
 import { TemplatePortal } from '@angular/cdk/portal'
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ContentChild,
-  Directive,
   ElementRef,
   EventEmitter,
-  Host,
-  Input,
   OnDestroy,
-  OnInit,
   Output,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core'
-import { BehaviorSubject, Observable, Subject } from 'rxjs'
-import { distinctUntilChanged, map, scan, shareReplay, takeUntil, withLatestFrom } from 'rxjs/operators'
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs'
+import { distinctUntilChanged, map, scan, shareReplay, takeUntil } from 'rxjs/operators'
 import { DynamicOverlayService } from './dynamic-overlay.service'
 
 @Component({
@@ -27,7 +24,7 @@ import { DynamicOverlayService } from './dynamic-overlay.service'
   styleUrls: ['./dynamic-overlay.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DynamicOverlayComponent implements OnDestroy {
+export class DynamicOverlayComponent implements OnDestroy, AfterViewInit {
   /**
    * Origin for the overlay. (the ●●● button)
    */
@@ -36,7 +33,7 @@ export class DynamicOverlayComponent implements OnDestroy {
   /**
    * The template of items to move back and forth
    */
-  @ContentChild(TemplateRef) overlayContent: TemplateRef<any>
+  @ContentChild(TemplateRef) dynamicContent: TemplateRef<any>
 
   /**
    * Emits when the overlay is opened
@@ -49,7 +46,9 @@ export class DynamicOverlayComponent implements OnDestroy {
   @Output() closed = new EventEmitter<void>(null)
 
   private overlayRef: OverlayRef
-  private portal: TemplatePortal<any>
+  private overlayPortal: TemplatePortal<any>
+
+  hostPortal: TemplatePortal<any>
 
   private breakpoints$ = new BehaviorSubject<number>(0)
   private highgestBreakpoint$ = this.breakpoints$.pipe(
@@ -67,14 +66,17 @@ export class DynamicOverlayComponent implements OnDestroy {
     private cdr: ChangeDetectorRef,
     dynamicOverlayService: DynamicOverlayService
   ) {
-    this.showMoreButton$ = dynamicOverlayService.windowWidth$.pipe(
-      withLatestFrom(this.highgestBreakpoint$),
+    this.showMoreButton$ = combineLatest([dynamicOverlayService.windowWidth$, this.highgestBreakpoint$]).pipe(
       map(([windowWidth, bp]) => windowWidth < bp),
       distinctUntilChanged(),
       shareReplay(1)
     )
 
     this.showMoreButton$.pipe(takeUntil(this.destroy$)).subscribe(() => this.close())
+  }
+
+  ngAfterViewInit() {
+    this.hostPortal = new TemplatePortal(this.dynamicContent, this.viewContainerRef)
   }
 
   registerBreakpoint(bp: number): void {
@@ -103,8 +105,8 @@ export class DynamicOverlayComponent implements OnDestroy {
     })
 
     this.overlayRef.backdropClick().subscribe(() => this.close())
-    this.portal = new TemplatePortal(this.overlayContent, this.viewContainerRef)
-    this.overlayRef.attach(this.portal)
+    this.overlayPortal = new TemplatePortal(this.dynamicContent, this.viewContainerRef)
+    this.overlayRef.attach(this.overlayPortal)
     this.opened.emit()
   }
 
