@@ -1,10 +1,8 @@
-import { async, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-
-import { DynamicOverlayComponent } from './dynamic-overlay.component'
-import { DynamicOverlayModule } from './dynamic-overlay.module'
+import { Overlay, OverlayContainer } from '@angular/cdk/overlay'
 import { Component } from '@angular/core'
-import { OverlayContainer, Overlay } from '@angular/cdk/overlay'
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 import { By } from '@angular/platform-browser'
+import { DynamicOverlayModule } from './dynamic-overlay.module'
 
 @Component({
   template: `
@@ -66,16 +64,14 @@ describe('DynamicOverlayComponent', () => {
     fixture.detectChanges()
   })
 
-  test(
-    'should show all the items in the template',
-    waitForAsync(async () => {
-      await fixture.whenStable()
-      const items = fixture.debugElement.queryAll(By.css('.item'))
-      expect(items.length).toBe(6)
-      const staticitems = fixture.debugElement.queryAll(By.css('.staticitem'))
-      expect(staticitems.length).toBe(1)
-    })
-  )
+  test('should show all the items in the template', () => {
+    window.dispatchEvent(new Event('DOMContentLoaded'))
+    fixture.detectChanges()
+    const items = fixture.debugElement.queryAll(By.css('.item'))
+    expect(items.length).toBe(6)
+    const staticitems = fixture.debugElement.queryAll(By.css('.staticitem'))
+    expect(staticitems.length).toBe(1)
+  })
 
   test('should hide items based on window width', () => {
     resizeWindow(475)
