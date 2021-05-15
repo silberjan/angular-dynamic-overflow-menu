@@ -1,4 +1,4 @@
-# Angular Dynamic Overlay
+# Angular Dynamic Overflow Menu
 
 > An "angular" approach to a very DRY dynamic overflow menu using [@angular/cdk](https://github.com/angular/components)s awesome portals.
 
@@ -10,7 +10,7 @@
 
 **Final Product:**
 
-![dynamic overlay GIF](./dynamic-overlay.gif)
+![dynamic overlay GIF](./dynamic-overflow-menu.gif)
 
 # Run it yourself
 

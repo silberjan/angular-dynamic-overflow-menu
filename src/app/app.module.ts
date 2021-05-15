@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
-import { DynamicOverlayModule } from 'src/lib/dynamic-overlay/dynamic-overlay.module'
+import { DynamicOverflowMenuModule } from 'src/lib/dynamic-overflow-menu/dynamic-overflow-menu.module'
 import { AppComponent } from './app.component'
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, DynamicOverlayModule],
+  imports: [BrowserModule, DynamicOverflowMenuModule],
   providers: [],
   bootstrap: [AppComponent],
 })

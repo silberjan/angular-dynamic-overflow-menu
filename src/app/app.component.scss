@@ -23,7 +23,7 @@
     max-width: 100%;
     @include flex-column();
     @include flex-align(center, center);
-    jcs-dynamic-overlay {
+    jcs-dynamic-overflow-menu {
       max-width: 100%;
       @include flex-row();
       @include flex-align(flex-start, stretch);
