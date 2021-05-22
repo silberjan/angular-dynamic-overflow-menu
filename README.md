@@ -1,5 +1,7 @@
 # Angular Dynamic Overflow Menu
 
+[**Read the full post about this menu on my blog**](https://jcs.wtf/angular-dynamic-overflow-menu/)
+
 > An "angular" approach to a very DRY dynamic overflow menu using [@angular/cdk](https://github.com/angular/components)s awesome portals.
 
 **Problem:** You need to develop a hotizontal toolbar for a responsive web app and you have no control over how wide your users pull the window. You face an overflow problem if the window gets too small.
